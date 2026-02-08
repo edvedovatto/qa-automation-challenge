@@ -1,8 +1,7 @@
 package clients;
 
-import io.restassured.response.Response;
-
 import static io.restassured.RestAssured.given;
+import io.restassured.response.Response;
 
 public class UsersClient {
 
@@ -20,5 +19,14 @@ public class UsersClient {
                 .body(payload)
             .when()
                 .post("/users");
+    }
+
+    public Response updateUser(int id, Object payload) {
+        return given()
+                .accept("application/json")
+                .contentType("application/json")
+                .body(payload)
+            .when()
+                .put("/users/" + id);
     }
 }
