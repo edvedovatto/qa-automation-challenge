@@ -1,7 +1,8 @@
 package clients;
 
-import static io.restassured.RestAssured.given;
 import io.restassured.response.Response;
+
+import static io.restassured.RestAssured.given;
 
 public class UsersClient {
 
@@ -12,7 +13,7 @@ public class UsersClient {
                 .get("/users/" + id);
     }
 
-    public Response createUser(String payload) {
+    public Response createUser(Object payload) {
         return given()
                 .accept("application/json")
                 .contentType("application/json")
