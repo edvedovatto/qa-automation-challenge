@@ -1,5 +1,7 @@
 package clients;
 
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import io.restassured.response.Response;
 
@@ -12,7 +14,7 @@ public class UsersClient {
                 .get("/users/" + id);
     }
 
-    public Response createUser(Object payload) {
+    public Response createUser(Map<String, Object> payload) {
         return given()
                 .accept("application/json")
                 .contentType("application/json")
@@ -21,12 +23,35 @@ public class UsersClient {
                 .post("/users");
     }
 
-    public Response updateUser(int id, Object payload) {
+    public Response createUserWithoutBody() {
+        return given()
+                .accept("application/json")
+                .contentType("application/json")
+            .when()
+                .post("/users");
+    }
+
+    public Response updateUser(int id, Map<String, Object> payload) {
         return given()
                 .accept("application/json")
                 .contentType("application/json")
                 .body(payload)
             .when()
                 .put("/users/" + id);
+    }
+
+    public Response deleteUser(int id) {
+        return given()
+                .accept("application/json")
+            .when()
+                .delete("/users/" + id);
+    }
+
+    public Response postOnUserWithId() {
+        return given()
+                .accept("application/json")
+                .contentType("application/json")
+            .when()
+                .post("/users/1");
     }
 }

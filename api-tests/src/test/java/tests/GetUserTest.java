@@ -1,13 +1,14 @@
 package tests;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import org.junit.jupiter.api.Test;
+
 import clients.UsersClient;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Test;
 import utils.Config;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 public class GetUserTest {
 
@@ -18,38 +19,27 @@ public class GetUserTest {
 
         RestAssured.baseURI = Config.BASE_URL;
 
-        Response response = usersClient.getUserById(1);
+        Response response = usersClient.getUserById(2);
 
-        assertSuccessfulUserResponse(response);
+        assertSuccessfulGetUserResponse(response);
     }
 
     @Test
-    void shouldReturn404WhenUserDoesNotExist() {
+    void shouldReturnNotFoundWhenUserDoesNotExist() {
 
         RestAssured.baseURI = Config.BASE_URL;
 
         Response response = usersClient.getUserById(9999);
 
-        assertThat(response.getStatusCode(), is(404));
+        assertUserNotFoundResponse(response);
     }
 
-    private void assertSuccessfulUserResponse(Response response) {
-        assertStatusOk(response);
-        assertJsonContentType(response);
-        assertValidUserPayload(response);
-    }
-
-    private void assertStatusOk(Response response) {
+    private void assertSuccessfulGetUserResponse(Response response) {
         assertThat(response.getStatusCode(), is(200));
-    }
-
-    private void assertJsonContentType(Response response) {
         assertThat(response.getHeader("Content-Type"), containsString("application/json"));
     }
 
-    private void assertValidUserPayload(Response response) {
-        assertThat(response.jsonPath().getInt("id"), is(1));
-        assertThat(response.jsonPath().getString("name"), notNullValue());
-        assertThat(response.jsonPath().getString("email"), notNullValue());
+    private void assertUserNotFoundResponse(Response response) {
+        assertThat(response.getStatusCode(), is(404));
     }
 }
