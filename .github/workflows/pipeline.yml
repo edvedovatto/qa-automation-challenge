@@ -9,7 +9,6 @@ jobs:
   api-tests:
     name: API Tests
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -23,18 +22,22 @@ jobs:
         working-directory: api-tests
         run: mvn clean test
 
+      - name: Generate Allure Report
+        if: always()
+        working-directory: api-tests
+        run: mvn allure:report
+
       - name: Upload API report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: api-tests-report
-          path: api-tests/target
+          name: api-allure-report
+          path: api-tests/target/site/allure-maven-plugin
 
   e2e-tests:
     name: E2E Tests (Cucumber + Selenium)
     needs: api-tests
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -52,5 +55,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-tests-report
-          path: e2e-tests/target
+          name: e2e-cucumber-report
+          path: e2e-tests/target/cucumber-report.html
