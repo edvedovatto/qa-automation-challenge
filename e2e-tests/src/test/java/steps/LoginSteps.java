@@ -10,34 +10,38 @@ import pages.LoginPage;
 import support.BaseTest;
 
 public class LoginSteps extends BaseTest {
-
     private LoginPage loginPage;
     private InventoryPage inventoryPage;
 
-    @Given("que estou na página de login")
-    public void openLoginPage() {
-        loginPage = new LoginPage(driver, wait);
-        inventoryPage = new InventoryPage(driver);
+    @Given("the user is on the login page")
+    public void userIsOnLoginPage() {
+        loginPage = new LoginPage(driver);
         loginPage.open();
     }
 
-    @When("faço login com usuário válido")
-    public void loginWithValidUser() {
-        loginPage.login("standard_user", "secret_sauce");
+    @Given("the user is logged in")
+    public void theUserIsLoggedIn() {
+        userIsOnLoginPage();
+        inventoryPage = loginPage.login("standard_user", "secret_sauce");
     }
 
-    @When("faço login com usuário inválido")
-    public void loginWithInvalidUser() {
-        loginPage.login("invalid_user", "invalid_pass");
+    @When("the user logs in with valid credentials")
+    public void loginWithValidCredentials() {
+        inventoryPage = loginPage.login("standard_user", "secret_sauce");
     }
 
-    @Then("devo acessar a página de inventário")
-    public void shouldAccessInventoryPage() {
+    @When("the user logs in with invalid credentials")
+    public void loginWithInvalidCredentials() {
+        loginPage.login("locked_out_user", "wrong_password");
+    }
+
+    @Then("the products page should be displayed")
+    public void productsPageDisplayed() {
         assertTrue(inventoryPage.isLoaded());
     }
 
-    @Then("devo ver uma mensagem de erro")
-    public void shouldSeeErrorMessage() {
-        assertTrue(loginPage.isErrorVisible());
+    @Then("an error message should be displayed")
+    public void errorMessageDisplayed() {
+        assertTrue(loginPage.isErrorDisplayed());
     }
 }
