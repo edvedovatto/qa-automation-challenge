@@ -9,6 +9,11 @@ jobs:
   api-tests:
     name: API Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      statuses: write
+      checks: write
+
     steps:
       - uses: actions/checkout@v4
 
@@ -22,17 +27,28 @@ jobs:
         working-directory: api-tests
         run: mvn clean test
 
-      - name: Generate Allure Report
+      - name: Load Allure history
+        uses: actions/checkout@v4
         if: always()
-        working-directory: api-tests
-        run: mvn allure:report
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Build Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: api-tests/target/allure-results
+          allure_report: allure-report
+          allure_history: allure-history
 
       - name: Upload API report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: api-allure-report
-          path: api-tests/target/site/allure-maven-plugin
+          path: allure-report
 
   e2e-tests:
     name: E2E Tests (Cucumber + Selenium)
@@ -49,11 +65,11 @@ jobs:
 
       - name: Run E2E tests
         working-directory: e2e-tests
-        run: mvn clean test
+        run: mvn clean test -DchromeHeadless=true
 
       - name: Upload E2E report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-cucumber-report
+          name: e2e-tests-report
           path: e2e-tests/target/cucumber-report.html
