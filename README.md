@@ -105,6 +105,7 @@ The project was updated to address the technical review feedback:
 - Added support for multiple environments.
 - Added headless execution support for UI tests.
 - Removed generic assertions and made validations scenario-specific.
+- Introduced dynamic test data generation.
 
 ## About ErrorResponse
 

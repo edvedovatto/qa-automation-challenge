@@ -1,4 +1,4 @@
-package config;
+package infra;
 
 import java.util.Collections;
 
@@ -20,7 +20,9 @@ public final class DriverFactory {
 
         ChromeOptions options = new ChromeOptions();
 
-        boolean headless = Boolean.parseBoolean(System.getProperty("chromeHeadless", "false"));
+        boolean headless = Boolean.parseBoolean(
+                System.getProperty("chromeHeadless", "false")
+        );
 
         if (headless) {
             options.addArguments("--headless=new");
@@ -30,8 +32,10 @@ public final class DriverFactory {
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--incognito");
         options.addArguments("--disable-blink-features=AutomationControlled");
-        options.setExperimentalOption("excludeSwitches",
-                Collections.singletonList("enable-automation"));
+        options.setExperimentalOption(
+                "excludeSwitches",
+                Collections.singletonList("enable-automation")
+        );
         options.setExperimentalOption("useAutomationExtension", false);
 
         DRIVER.set(new ChromeDriver(options));

@@ -26,5 +26,6 @@ public class GetUserTest {
         Response response = usersClient.getUserById(9999);
 
         assertThat(response.getStatusCode(), is(404));
+        assertThat(response.getBody().asString(), is("{}"));
     }
 }

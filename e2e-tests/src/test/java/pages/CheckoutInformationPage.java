@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class CheckoutInformationPage {
+
     private final WebDriver driver;
 
     private final By firstName = By.id("first-name");
@@ -25,6 +26,10 @@ public class CheckoutInformationPage {
 
     public void continueCheckout() {
         driver.findElement(continueButton).click();
+    }
+
+    public String getErrorMessageText() {
+        return driver.findElement(errorMessage).getText();
     }
 
     public boolean isErrorDisplayed() {

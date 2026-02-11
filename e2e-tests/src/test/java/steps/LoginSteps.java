@@ -1,48 +1,45 @@
 package steps;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import config.DriverFactory;
+import infra.DriverFactory;
+import infra.EnvironmentConfig;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import pages.InventoryPage;
 import pages.LoginPage;
 
 public class LoginSteps {
 
     private LoginPage loginPage;
-    private InventoryPage inventoryPage;
+    private String actualMessage;
 
     @Given("the user is on the login page")
     public void userIsOnLoginPage() {
         loginPage = new LoginPage(DriverFactory.getDriver());
-        loginPage.open();
+        loginPage.open(EnvironmentConfig.getBaseUrl());
     }
 
     @Given("the user is logged in")
     public void theUserIsLoggedIn() {
-        userIsOnLoginPage();
-        inventoryPage = loginPage.login("standard_user", "secret_sauce");
+        loginPage = new LoginPage(DriverFactory.getDriver());
+        loginPage.open(EnvironmentConfig.getBaseUrl());
+        loginPage.login("standard_user", "secret_sauce");
     }
 
-    @When("the user logs in with valid credentials")
-    public void loginWithValidCredentials() {
-        inventoryPage = loginPage.login("standard_user", "secret_sauce");
+    @When("the user logs in with {string} and {string}")
+    public void loginWithCredentials(String username, String password) {
+        loginPage.login(username, password);
+
+        if (loginPage.isOnInventoryPage()) {
+            actualMessage = loginPage.getSuccessMessage();
+        } else {
+            actualMessage = loginPage.getErrorMessage();
+        }
     }
 
-    @When("the user logs in with invalid credentials")
-    public void loginWithInvalidCredentials() {
-        loginPage.login("locked_out_user", "wrong_password");
-    }
-
-    @Then("the products page should be displayed")
-    public void productsPageDisplayed() {
-        assertTrue(inventoryPage.isLoaded());
-    }
-
-    @Then("an error message should be displayed")
-    public void errorMessageDisplayed() {
-        assertTrue(loginPage.isErrorDisplayed());
+    @Then("the login result message should be {string}")
+    public void loginResultShouldBe(String expectedMessage) {
+        assertEquals(expectedMessage, actualMessage);
     }
 }

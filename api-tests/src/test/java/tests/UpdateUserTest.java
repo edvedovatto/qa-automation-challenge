@@ -1,5 +1,7 @@
 package tests;
 
+import java.util.UUID;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import org.junit.jupiter.api.Test;
@@ -14,10 +16,16 @@ public class UpdateUserTest {
 
     @Test
     void shouldUpdateUserSuccessfully() {
-        UserRequest payload = new UserRequest("Eduardo Vedovatto", "Senior QA");
+
+        String dynamicName = "user-" + UUID.randomUUID().toString().substring(0, 6);
+        String dynamicJob = "SeniorQA-" + UUID.randomUUID().toString().substring(0, 6);
+
+        UserRequest payload = new UserRequest(dynamicName, dynamicJob);
+
         Response response = usersClient.updateUser(2, payload);
 
         assertThat(response.getStatusCode(), is(200));
-        assertThat(response.jsonPath().getString("job"), is(payload.getJob()));
+        assertThat(response.jsonPath().getString("name"), is(dynamicName));
+        assertThat(response.jsonPath().getString("job"), is(dynamicJob));
     }
 }
