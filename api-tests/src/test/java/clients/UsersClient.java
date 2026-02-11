@@ -1,57 +1,40 @@
 package clients;
 
-import java.util.Map;
-
-import static io.restassured.RestAssured.given;
+import infra.BaseApiClient;
 import io.restassured.response.Response;
+import models.UserRequest;
 
-public class UsersClient {
+public class UsersClient extends BaseApiClient {
 
     public Response getUserById(int id) {
-        return given()
-                .accept("application/json")
-            .when()
-                .get("/users/" + id);
+        return baseRequest()
+                .when()
+                .get("/users/{id}", id);
     }
 
-    public Response createUser(Map<String, Object> payload) {
-        return given()
-                .accept("application/json")
-                .contentType("application/json")
+    public Response createUser(UserRequest payload) {
+        return baseRequest()
                 .body(payload)
-            .when()
+                .when()
                 .post("/users");
     }
 
-    public Response createUserWithoutBody() {
-        return given()
-                .accept("application/json")
-                .contentType("application/json")
-            .when()
-                .post("/users");
-    }
-
-    public Response updateUser(int id, Map<String, Object> payload) {
-        return given()
-                .accept("application/json")
-                .contentType("application/json")
+    public Response updateUser(int id, UserRequest payload) {
+        return baseRequest()
                 .body(payload)
-            .when()
-                .put("/users/" + id);
+                .when()
+                .put("/users/{id}", id);
     }
 
     public Response deleteUser(int id) {
-        return given()
-                .accept("application/json")
-            .when()
-                .delete("/users/" + id);
+        return baseRequest()
+                .when()
+                .delete("/users/{id}", id);
     }
 
     public Response postOnUserWithId() {
-        return given()
-                .accept("application/json")
-                .contentType("application/json")
-            .when()
-                .post("/users/1");
+        return baseRequest()
+                .when()
+                .post("/users/{id}", 1);
     }
 }
