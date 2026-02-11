@@ -2,20 +2,21 @@ package steps;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import config.DriverFactory;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.InventoryPage;
 import pages.LoginPage;
-import support.BaseTest;
 
-public class LoginSteps extends BaseTest {
+public class LoginSteps {
+
     private LoginPage loginPage;
     private InventoryPage inventoryPage;
 
     @Given("the user is on the login page")
     public void userIsOnLoginPage() {
-        loginPage = new LoginPage(driver);
+        loginPage = new LoginPage(DriverFactory.getDriver());
         loginPage.open();
     }
 

@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import support.Config;
+import config.EnvironmentConfig;
 
 public class LoginPage {
 
@@ -25,21 +25,19 @@ public class LoginPage {
     }
 
     public void open() {
-        driver.get(Config.getBaseUrl());
+        driver.get(EnvironmentConfig.getBaseUrl());
     }
 
     public InventoryPage login(String username, String password) {
-        driver.findElement(usernameInput).clear();
         driver.findElement(usernameInput).sendKeys(username);
-
-        driver.findElement(passwordInput).clear();
         driver.findElement(passwordInput).sendKeys(password);
-
         driver.findElement(loginButton).click();
         return new InventoryPage(driver);
     }
 
     public boolean isErrorDisplayed() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).isDisplayed();
+        return wait.until(
+                ExpectedConditions.visibilityOfElementLocated(errorMessage)
+        ).isDisplayed();
     }
 }
