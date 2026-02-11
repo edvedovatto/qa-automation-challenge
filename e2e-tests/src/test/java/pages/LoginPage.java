@@ -7,7 +7,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import support.Config;
+
 public class LoginPage {
+
     private final WebDriver driver;
     private final WebDriverWait wait;
 
@@ -22,12 +25,16 @@ public class LoginPage {
     }
 
     public void open() {
-        driver.get("https://www.saucedemo.com/");
+        driver.get(Config.getBaseUrl());
     }
 
     public InventoryPage login(String username, String password) {
+        driver.findElement(usernameInput).clear();
         driver.findElement(usernameInput).sendKeys(username);
+
+        driver.findElement(passwordInput).clear();
         driver.findElement(passwordInput).sendKeys(password);
+
         driver.findElement(loginButton).click();
         return new InventoryPage(driver);
     }
