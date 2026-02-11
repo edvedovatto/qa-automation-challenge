@@ -94,7 +94,7 @@ Open the file generated at target/cucumber-report.html
 ## Future Improvements
 - Mobile: The structure is ready for an Appium module, that would be integrated as a parallel job in the existing CI pipeline. In a production scenario, the mobile suite would be triggered automatically after successful API/E2E runs (or in parallel), ensuring that the application remains stable across all platforms at every commit.
 
-### Improvements Implemented After Feedback
+## Improvements Implemented After Feedback
 The project was updated to address the technical review feedback:
 
 - Removed hardcoded URLs in both API and E2E modules.
