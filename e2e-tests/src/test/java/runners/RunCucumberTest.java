@@ -11,12 +11,12 @@ import io.cucumber.junit.platform.engine.Constants;
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
 @ConfigurationParameter(
-    key = Constants.GLUE_PROPERTY_NAME,
-    value = "steps"
+        key = Constants.GLUE_PROPERTY_NAME,
+        value = "steps,support"
 )
 @ConfigurationParameter(
-    key = Constants.PLUGIN_PROPERTY_NAME,
-    value = "html:target/cucumber-report.html"
+        key = Constants.PLUGIN_PROPERTY_NAME,
+        value = "pretty,html:target/cucumber-report.html"
 )
 public class RunCucumberTest {
 }
